@@ -10,7 +10,7 @@
 #define WIFI_PASSWORD "MuhammadArroyyan#"
 
 #define API_KEY "AIzaSyCL01ZczH3DV1pDL0drOTmnKgukk-YvJuk"
-#define DATABASE_URL "https://console.firebase.google.com/u/0/project/smart-office-room-23/database/smart-office-room-23-default-rtdb/data/~2F" // <-- GANTI DENGAN URL Realtime Database Anda
+#define DATABASE_URL "https://smart-office-room-23-default-rtdb.asia-southeast1.firebasedatabase.app/"
 
 FirebaseData fbdo;
 FirebaseAuth auth;
