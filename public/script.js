@@ -1,22 +1,3 @@
-// Import fungsi-fungsi dari Firebase SDK
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
-
-// === KONFIGURASI FIREBASE ANDA ===
-const firebaseConfig = {
-    apiKey: "AIzaSyCL01ZczH3DV1pDL0drOTmnKgukk-YvJuk",
-    authDomain: "smart-office-room-23.firebaseapp.com",
-    databaseURL: "https://smart-office-room-23-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "smart-office-room-23",
-    storageBucket: "smart-office-room-23.appspot.com",
-    messagingSenderId: "39174489550",
-    appId: "1:39174489550:web:8e6cfe7a8d8a8edf35179f"
-};
-
-// Inisialisasi Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
 // === Threshold (Harus sesuai dengan di ESP32) ===
 const DISTANCE_THRESHOLD = 50; 
 const HUMIDITY_THRESHOLD = 70; // Kelembapan dalam %
