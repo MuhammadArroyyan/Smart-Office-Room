@@ -1,85 +1,212 @@
-/* Reset dan dasar */
+/* --- ROOT & THEME VARIABLES --- */
+:root {
+    --bg-color: #1a1a1d;
+    --card-bg: rgba(44, 44, 49, 0.7);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-primary: #f4f4f5;
+    --text-secondary: #a1a1aa;
+    --glow-color: #00aaff;
+    --warning-color: #ff4757;
+    --warning-glow: rgba(255, 71, 87, 0.5);
+    --success-color: #2ed573;
+}
+
+/* --- RESET & GLOBAL STYLES --- */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: #f0f2f5;
-  padding: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    background-image: radial-gradient(circle at top left, rgba(0, 170, 255, 0.1), transparent 30%),
+                      radial-gradient(circle at bottom right, rgba(255, 71, 87, 0.1), transparent 30%);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px;
 }
 
 .container {
-  background: #ffffff;
-  padding: 35px 40px;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-  width: 1000px;
-  max-width: 95vw;
+    width: 100%;
+    max-width: 1200px;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 35px;
-  font-size: 2.2rem;
-  color: #1c1e21;
+/* --- HEADER --- */
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.dashboard-header h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.dashboard-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
 }
 
-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 20px;
+/* --- GRID LAYOUT --- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
 }
 
-td {
-  vertical-align: top;
-  width: 50%;
-}
-
+/* --- CARD STYLING (DATA-BLOCK) --- */
 .data-block {
-  background: #f7f9fc;
-  border: 1px solid #e0e4e9;
-  padding: 25px 20px;
-  border-radius: 12px;
-  min-height: 140px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: all 0.3s ease;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .data-block:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.icon {
-  font-size: 2rem;
-  margin-bottom: 10px;
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+.card-header i {
+    width: 20px;
+    height: 20px;
 }
 
-.data {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #333;
+.card-body {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
 }
 
-.status {
-  margin-top: 8px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #28a745; /* Warna default (hijau) */
-  min-height: 24px;
-  transition: color 0.3s;
+.card-footer .status {
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--success-color);
+    transition: color 0.3s ease;
 }
 
-/* Kelas untuk status peringatan */
-.status.warning {
-  color: #dc3545; /* Merah untuk peringatan */
+/* --- GAUGE STYLING --- */
+.gauge-container {
+    width: 100%;
+    max-width: 200px;
+    position: relative;
+}
+.gauge-body {
+    width: 100%;
+    height: 0;
+    padding-bottom: 50%; /* Membuat rasio 2:1 (setengah lingkaran) */
+    background-color: #333;
+    border-radius: 200px 200px 0 0;
+    position: relative;
+    overflow: hidden;
+    --gauge-value: 0deg; /* Nilai default gauge */
+}
+/* Lapisan progress gauge */
+.gauge-body::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(
+        var(--glow-color), 
+        #00c6ff, 
+        #0072ff,
+        var(--glow-color) var(--gauge-value), 
+        transparent var(--gauge-value)
+    );
+    transition: transform 0.5s ease-out;
+}
+/* Lapisan tengah untuk membuat efek donat */
+.gauge-body::before {
+    content: '';
+    position: absolute;
+    background: var(--card-bg);
+    width: calc(100% - 30px);
+    height: calc(200% - 30px);
+    top: 15px;
+    left: 15px;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.gauge-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: 700;
+    z-index: 2;
+}
+.gauge-unit {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    color: var(--text-secondary);
+    z-index: 2;
+}
+
+
+/* --- DATA NON-GAUGE --- */
+.centered-data {
+    text-align: center;
+}
+.main-data {
+    font-size: 3rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+.sub-data {
+    color: var(--text-secondary);
+}
+
+
+/* --- STATUS WARNING --- */
+.data-block.warning {
+    border-color: var(--warning-color);
+    box-shadow: 0 0 20px var(--warning-glow);
+}
+.card-footer .status.warning {
+    color: var(--warning-color);
+}
+/* Animasi untuk ikon saat warning */
+.data-block.warning .card-header i {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); color: var(--warning-color); }
+    50% { transform: scale(1.2); color: var(--text-primary); }
+    100% { transform: scale(1); color: var(--warning-color); }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 600px) {
+    body { padding: 20px; }
+    .dashboard-header h1 { font-size: 2rem; }
+    .dashboard-grid { gap: 20px; }
 }

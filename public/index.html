@@ -1,76 +1,114 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Office Monitoring</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Office Monitoring</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js" type="module"></script>
 </head>
 <body>
-  <div class="container">
-    <h2>Smart Office Room Monitoring</h2>
+    <div class="container">
+        <header class="dashboard-header">
+            <h1>Smart Office Monitoring</h1>
+            <p id="last-updated">Menunggu data...</p>
+        </header>
 
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <div class="data-block">
-              <div class="icon">🌡️</div>
-              <div class="data" id="temp">Suhu: -- °C</div>
-              <div class="status" id="tempStatus">Status normal</div>
+        <main class="dashboard-grid">
+            <div class="data-block" id="temp-block">
+                <div class="card-header">
+                    <i data-feather="thermometer"></i>
+                    <span>Suhu Ruangan</span>
+                </div>
+                <div class="card-body">
+                    <div class="gauge-container">
+                        <div class="gauge-body" id="temp-gauge">
+                            <div class="gauge-value" id="temp">--</div>
+                            <div class="gauge-unit">°C</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="status" id="tempStatus">Status normal</div>
+                </div>
             </div>
-          </td>
-          <td>
-            <div class="data-block">
-              <div class="icon">💧</div>
-              <div class="data" id="hum">Kelembapan: -- %</div>
-              <div class="status" id="humStatus">Status normal</div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="data-block">
-              <div class="icon">📏</div>
-              <div class="data" id="dist">Jarak Pintu: -- cm</div>
-              <div class="status" id="distStatus">Tidak ada orang terdeteksi</div>
-            </div>
-          </td>
-          <td>
-            <div class="data-block">
-              <div class="icon">💡</div>
-              <div class="data" id="ldr">Intensitas Cahaya: --</div>
-              <div class="status" id="ldrStatus">Cahaya cukup</div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 
-  <script>
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "firebase/app";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
+            <div class="data-block" id="hum-block">
+                <div class="card-header">
+                    <i data-feather="droplet"></i>
+                    <span>Kelembapan Udara</span>
+                </div>
+                <div class="card-body">
+                    <div class="gauge-container">
+                        <div class="gauge-body" id="hum-gauge">
+                            <div class="gauge-value" id="hum">--</div>
+                            <div class="gauge-unit">%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="status" id="humStatus">Status normal</div>
+                </div>
+            </div>
 
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyCL01ZczH3DV1pDL0drOTmnKgukk-YvJuk",
-      authDomain: "smart-office-room-23.firebaseapp.com",
-      databaseURL: "https://smart-office-room-23-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "smart-office-room-23",
-      storageBucket: "smart-office-room-23.firebasestorage.app",
-      messagingSenderId: "39174489550",
-      appId: "1:39174489550:web:8e6cfe7a8d8a8edf35179f"
-    };
+            <div class="data-block" id="dist-block">
+                <div class="card-header">
+                    <i data-feather="git-pull-request"></i>
+                    <span>Pintu Masuk</span>
+                </div>
+                <div class="card-body centered-data">
+                    <div class="main-data" id="dist">--</div>
+                    <div class="sub-data">cm</div>
+                </div>
+                <div class="card-footer">
+                    <div class="status" id="distStatus">Tidak ada orang terdeteksi</div>
+                </div>
+            </div>
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-  </script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
-  <script src="script.js"></script>
+            <div class="data-block" id="ldr-block">
+                <div class="card-header">
+                    <i data-feather="sun"></i>
+                    <span>Intensitas Cahaya</span>
+                </div>
+                <div class="card-body centered-data">
+                    <div class="main-data" id="ldr">--</div>
+                    <div class="sub-data">LDR Value</div>
+                </div>
+                <div class="card-footer">
+                    <div class="status" id="ldrStatus">Cahaya cukup</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+      // Import fungsi-fungsi dari Firebase SDK
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+      import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+      // === KONFIGURASI FIREBASE ANDA ===
+      const firebaseConfig = {
+          apiKey: "AIzaSyCL01ZczH3DV1pDL0drOTmnKgukk-YvJuk",
+          authDomain: "smart-office-room-23.firebaseapp.com",
+          databaseURL: "https://smart-office-room-23-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "smart-office-room-23",
+          storageBucket: "smart-office-room-23.appspot.com",
+          messagingSenderId: "39174489550",
+          appId: "1:39174489550:web:8e6cfe7a8d8a8edf35179f"
+      };
+
+      // Inisialisasi Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+    </script>
+    <script src="script.js" type="module"></script>
 </body>
 </html>
