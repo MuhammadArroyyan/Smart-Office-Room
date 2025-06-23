@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Office Monitoring</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Smart Office Room Monitoring</h2>
+
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <div class="data-block">
+              <div class="icon">🌡️</div>
+              <div class="data" id="temp">Suhu: -- °C</div>
+              <div class="status" id="tempStatus">Status normal</div>
+            </div>
+          </td>
+          <td>
+            <div class="data-block">
+              <div class="icon">💧</div>
+              <div class="data" id="hum">Kelembapan: -- %</div>
+              <div class="status" id="humStatus">Status normal</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="data-block">
+              <div class="icon">📏</div>
+              <div class="data" id="dist">Jarak Pintu: -- cm</div>
+              <div class="status" id="distStatus">Tidak ada orang terdeteksi</div>
+            </div>
+          </td>
+          <td>
+            <div class="data-block">
+              <div class="icon">💡</div>
+              <div class="data" id="ldr">Intensitas Cahaya: --</div>
+              <div class="status" id="ldrStatus">Cahaya cukup</div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
