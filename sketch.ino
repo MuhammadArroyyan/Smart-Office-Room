@@ -1,166 +1,128 @@
+#include <WiFi.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <DHT.h>
-#include <WiFi.h>
-#include <FirebaseESP32.h>
+#include <Firebase_ESP_Client.h>
 #include <addons/TokenHelper.h>
 #include <addons/RTDBHelper.h>
 
 #define WIFI_SSID "Arroyyan"
 #define WIFI_PASSWORD "MuhammadArroyyan#"
-
 #define API_KEY "AIzaSyCL01ZczH3DV1pDL0drOTmnKgukk-YvJuk"
 #define DATABASE_URL "https://smart-office-room-23-default-rtdb.asia-southeast1.firebasedatabase.app"
 
 FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
+bool signupOK = false;
 
-// === Perangkat Keras ===
-// LCD I2C
+// === Komponen Keluaran ===
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-// Definisi Pin
-#define TRIG_PIN    5   // Ultrasonik Trigger
-#define ECHO_PIN    18  // Ultrasonik Echo
-#define DHT_PIN     15  // DHT22 Data Pin
-#define LDR_PIN     34  // LDR Analog Pin
-#define LED_KUNING  2   // LED untuk Indikator Cahaya
-#define LED_MERAH   4   // LED untuk Indikator Kelembapan
+// === Pin Sensor ===
+#define TRIG_PIN 5
+#define ECHO_PIN 18
+#define DHT_PIN 15
+#define LDR_PIN 34
+#define LED_KUNING 2
+#define LED_MERAH 4
 
-// Sensor DHT
 #define DHTTYPE DHT22
 DHT dht(DHT_PIN, DHTTYPE);
 
-// === Threshold (Ambang Batas) ===
-#define LDR_THRESHOLD       1000  // Nilai LDR saat dianggap gelap (0-4095, perlu dikalibrasi)
-#define HUMIDITY_THRESHOLD  60.0  // Kelembapan dalam %
+// === Ambang Batas ===
+#define LDR_THRESHOLD 1000
+#define HUMIDITY_THRESHOLD 60.0
 
 void setup() {
   Serial.begin(115200);
-
-  // Inisialisasi Perangkat
   lcd.init();
   lcd.backlight();
   dht.begin();
 
-  // Konfigurasi Mode Pin
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
-  pinMode(LDR_PIN, INPUT); // Pin ADC tidak perlu di-set mode-nya, tapi ini untuk kejelasan
+  pinMode(LDR_PIN, INPUT);
   pinMode(LED_KUNING, OUTPUT);
   pinMode(LED_MERAH, OUTPUT);
 
-  // --- Koneksi WiFi ---
   lcd.setCursor(0, 0);
   lcd.print("Connecting WiFi");
-  Serial.print("Connecting to WiFi");
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    lcd.setCursor(0, 1);
-    lcd.print(".");
     delay(500);
+    Serial.print(".");
+    lcd.print(".");
   }
   Serial.println("\nWiFi Connected!");
   lcd.clear();
-  lcd.setCursor(0, 0);
   lcd.print("WiFi Connected!");
 
-  // --- Inisialisasi Firebase ---
+  // === Konfigurasi Firebase ===
   config.api_key = API_KEY;
   config.database_url = DATABASE_URL;
+  config.token_status_callback = tokenStatusCallback;
+
+  // Login anonymous
+  if (Firebase.signUp(&config, &auth, "", "")) {
+    Serial.println("SignUp OK");
+    signupOK = true;
+  } else {
+    Serial.printf("SignUp error: %s\n", config.signer.signupError.message.c_str());
+  }
+
   Firebase.begin(&config, &auth);
   Firebase.reconnectWiFi(true);
-  
-  lcd.setCursor(0, 1);
-  lcd.print("Firebase Ready!");
   delay(2000);
   lcd.clear();
 }
 
 void loop() {
-  // --- 1. Membaca Semua Sensor ---
-
-  // Baca Sensor DHT22
   float humidity = dht.readHumidity();
   float temperature = dht.readTemperature();
-  
-  // PERBAIKAN: Cek jika pembacaan DHT gagal (akan menghasilkan NaN)
+
   if (isnan(humidity) || isnan(temperature)) {
-    Serial.println("Failed to read from DHT sensor!");
+    Serial.println("Failed to read from DHT!");
     lcd.setCursor(0, 0);
     lcd.print("DHT Error!");
     delay(1000);
-    return; // Lewati sisa loop jika sensor error
+    return;
   }
 
-  // Baca Sensor Ultrasonik
-  digitalWrite(TRIG_PIN, LOW);
-  delayMicroseconds(2);
-  digitalWrite(TRIG_PIN, HIGH);
-  delayMicroseconds(10);
+  // Baca jarak
+  digitalWrite(TRIG_PIN, LOW); delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);
   digitalWrite(TRIG_PIN, LOW);
   long duration = pulseIn(ECHO_PIN, HIGH);
   float distance = duration * 0.034 / 2;
 
-  // Baca Sensor LDR
+  // Baca LDR
   int ldrValue = analogRead(LDR_PIN);
 
-  // --- 2. Logika Kontrol LED ---
+  // Kontrol LED
+  digitalWrite(LED_KUNING, ldrValue < LDR_THRESHOLD ? HIGH : LOW);
+  digitalWrite(LED_MERAH, humidity > HUMIDITY_THRESHOLD ? HIGH : LOW);
 
-  // PERBAIKAN: Logika LED Kuning (LDR)
-  if (ldrValue < LDR_THRESHOLD) {
-    digitalWrite(LED_KUNING, HIGH); // Ruangan gelap, nyalakan lampu (LED Kuning)
-  } else {
-    digitalWrite(LED_KUNING, LOW);
-  }
-
-  // PERBAIKAN: Logika LED Merah (Kelembapan)
-  if (humidity > HUMIDITY_THRESHOLD) {
-    digitalWrite(LED_MERAH, HIGH); // Kelembapan tinggi, nyalakan LED Merah
-  } else {
-    digitalWrite(LED_MERAH, LOW);
-  }
-
-  // --- 3. Menampilkan Data ke LCD ---
-  
+  // Tampilkan LCD
   lcd.clear();
-  // Baris 1: Suhu & Kelembapan
   lcd.setCursor(0, 0);
-  lcd.print("T:");
-  lcd.print(temperature, 1);
-  lcd.print((char)223); // Simbol derajat
-  lcd.print("C H:");
-  lcd.print(humidity, 0);
-  lcd.print("%");
-  
-  // Baris 2: Jarak & Cahaya
+  lcd.printf("T:%.1fC H:%d%%", temperature, (int)humidity);
   lcd.setCursor(0, 1);
-  lcd.print("Dist:");
-  lcd.print(distance, 0);
-  lcd.print(" LDR:");
-  lcd.print(ldrValue);
+  lcd.printf("D:%dcm LDR:%d", (int)distance, ldrValue);
 
-
-  // --- 4. Mengirim Data ke Firebase ---
-  
-  if (Firebase.ready()) {
-    String path = "/sensor"; // Path utama di Firebase
-    Firebase.setFloat(fbdo, path + "/temperature", temperature);
-    Firebase.setFloat(fbdo, path + "/humidity", humidity);
-    Firebase.setFloat(fbdo, path + "/distance", distance);
-    Firebase.setInt(fbdo, path + "/ldr", ldrValue);
-
-    // Kirim juga status LED agar website tahu
-    Firebase.setBool(fbdo, path + "/led_merah_status", (humidity > HUMIDITY_THRESHOLD));
-    Firebase.setBool(fbdo, path + "/led_kuning_status", (ldrValue < LDR_THRESHOLD));
-
-    Serial.println("Data sent to Firebase successfully.");
+  // Kirim ke Firebase
+  if (Firebase.ready() && signupOK) {
+    String path = "/sensor";
+    Firebase.RTDB.setFloat(&fbdo, path + "/temperature", temperature);
+    Firebase.RTDB.setFloat(&fbdo, path + "/humidity", humidity);
+    Firebase.RTDB.setFloat(&fbdo, path + "/distance", distance);
+    Firebase.RTDB.setInt(&fbdo, path + "/ldr", ldrValue);
+    Firebase.RTDB.setBool(&fbdo, path + "/led_merah_status", humidity > HUMIDITY_THRESHOLD);
+    Firebase.RTDB.setBool(&fbdo, path + "/led_kuning_status", ldrValue < LDR_THRESHOLD);
+    Serial.println("Data sent to Firebase.");
   } else {
     Serial.println("Firebase not ready. Reason: " + fbdo.errorReason());
   }
 
-  // Jeda sebelum loop berikutnya
-  delay(5000); // Kirim data setiap 5 detik agar tidak membanjiri Firebase
+  delay(5000);
 }
