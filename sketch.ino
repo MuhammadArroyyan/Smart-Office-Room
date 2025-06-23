@@ -9,12 +9,12 @@
 // =================================================================
 // === KONFIGURASI (PASTIKAN SEMUA BENAR) ===
 // =================================================================
-#define WIFI_SSID "Isi_Nama_WiFi_Anda"          // <-- GANTI DENGAN NAMA WIFI ANDA
-#define WIFI_PASSWORD "Isi_Password_WiFi_Anda" // <-- GANTI DENGAN PASSWORD WIFI ANDA
+#define WIFI_SSID "Arroyyan"          // <-- GANTI DENGAN NAMA WIFI ANDA
+#define WIFI_PASSWORD "MuhammadArroyyan#" // <-- GANTI DENGAN PASSWORD WIFI ANDA
 
 // --- Firebase Config (PASTIKAN KONSISTEN DENGAN KODE JAVASCRIPT) ---
-#define API_KEY "GANTI_DENGAN_API_KEY_ANDA"     // <-- GANTI DENGAN API Key dari Firebase
-#define DATABASE_URL "GANTI_DENGAN_DATABASE_URL_ANDA" // <-- GANTI DENGAN URL Realtime Database Anda
+#define API_KEY "AIzaSyCL01ZczH3DV1pDL0drOTmnKgukk-YvJuk"     // <-- GANTI DENGAN API Key dari Firebase
+#define DATABASE_URL "https://console.firebase.google.com/u/0/project/smart-office-room-23/database/smart-office-room-23-default-rtdb/data/~2F" // <-- GANTI DENGAN URL Realtime Database Anda
 
 FirebaseData fbdo;
 FirebaseAuth auth;

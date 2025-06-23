@@ -2,24 +2,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
-// =================================================================
-// === KONFIGURASI FIREBASE (HARUS SAMA DENGAN DI ESP32) ===
-// =================================================================
-const firebaseConfig = {
-    // PERINGATAN: GANTI SEMUA INI DENGAN KONFIGURASI FIREBASE ANDA
-    apiKey: "GANTI_DENGAN_API_KEY_ANDA",
-    authDomain: "proyek-anda.firebaseapp.com",
-    databaseURL: "GANTI_DENGAN_DATABASE_URL_ANDA",
-    projectId: "proyek-anda",
-    storageBucket: "proyek-anda.appspot.com",
-    messagingSenderId: "GANTI_DENGAN_SENDER_ID_ANDA",
-    appId: "GANTI_DENGAN_APP_ID_ANDA"
-};
-
-// Inisialisasi Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
 // === Threshold (Harus sesuai dengan di ESP32) ===
 const DISTANCE_THRESHOLD = 50; // Jarak dalam cm untuk deteksi orang
 const HUMIDITY_THRESHOLD = 60; // Kelembapan dalam %

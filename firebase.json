@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "sites": "smart-office-room-23",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
