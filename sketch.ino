@@ -73,9 +73,6 @@ void setup() {
   Firebase.begin(&config, &auth);
   Firebase.reconnectWiFi(true);
   
-  // Menyiapkan token (Penting untuk Firebase)
-  config.token_status_callback = tokenStatusCallback; // Lihat fungsi di bawah
-
   lcd.setCursor(0, 1);
   lcd.print("Firebase Ready!");
   delay(2000);

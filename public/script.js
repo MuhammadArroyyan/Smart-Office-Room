@@ -52,11 +52,9 @@ onValue(sensorRef, (snapshot) => {
     const data = snapshot.val();
     if (data) {
         updateUI(data);
+        feather.replace(); 
     }
 });
-
-// Panggil feather.replace() setelah DOM dimuat
-feather.replace();
 
 function updateUI(data) {
     // Update timestamp
