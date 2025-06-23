@@ -6,14 +6,10 @@
 #include <addons/TokenHelper.h>
 #include <addons/RTDBHelper.h>
 
-// =================================================================
-// === KONFIGURASI (PASTIKAN SEMUA BENAR) ===
-// =================================================================
-#define WIFI_SSID "Arroyyan"          // <-- GANTI DENGAN NAMA WIFI ANDA
-#define WIFI_PASSWORD "MuhammadArroyyan#" // <-- GANTI DENGAN PASSWORD WIFI ANDA
+#define WIFI_SSID "Arroyyan"
+#define WIFI_PASSWORD "MuhammadArroyyan#"
 
-// --- Firebase Config (PASTIKAN KONSISTEN DENGAN KODE JAVASCRIPT) ---
-#define API_KEY "AIzaSyCL01ZczH3DV1pDL0drOTmnKgukk-YvJuk"     // <-- GANTI DENGAN API Key dari Firebase
+#define API_KEY "AIzaSyCL01ZczH3DV1pDL0drOTmnKgukk-YvJuk"
 #define DATABASE_URL "https://console.firebase.google.com/u/0/project/smart-office-room-23/database/smart-office-room-23-default-rtdb/data/~2F" // <-- GANTI DENGAN URL Realtime Database Anda
 
 FirebaseData fbdo;
