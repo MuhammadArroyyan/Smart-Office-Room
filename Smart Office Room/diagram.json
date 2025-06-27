@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "author": "Muhammad Arroyyan",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-breadboard", "id": "bb1", "top": 64.2, "left": -6.8, "attrs": {} },
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 57.6, "left": -206.36, "attrs": {} },
+    {
+      "type": "wokwi-photoresistor-sensor",
+      "id": "ldr1",
+      "top": -6.4,
+      "left": 384.8,
+      "attrs": {}
+    },
+    { "type": "wokwi-led", "id": "led1", "top": 92.4, "left": 426.2, "attrs": { "color": "red" } },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": 92.4,
+      "left": 311,
+      "attrs": { "color": "yellow" }
+    },
+    { "type": "wokwi-hc-sr04", "id": "ultrasonic1", "top": 279.9, "left": -4.1, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht1", "top": 278.7, "left": 186.6, "attrs": {} },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd2",
+      "top": -80,
+      "left": 72.8,
+      "attrs": { "pins": "i2c" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 138.35,
+      "left": 336,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 138.35,
+      "left": 451.2,
+      "attrs": { "value": "1000" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "esp:5V", "bb1:tp.1", "white", [ "h0.15", "v28.8", "h182.4", "v-211.5" ] ],
+    [ "esp:GND.1", "bb1:tn.1", "black", [ "h-9.45", "v67.2", "h182.4", "v-191.9" ] ],
+    [ "lcd2:GND", "bb1:tn.2", "black", [ "h-19.2", "v86.4" ] ],
+    [ "lcd2:VCC", "bb1:tp.2", "white", [ "h0" ] ],
+    [ "lcd2:SDA", "bb1:4t.a", "green", [ "h-9.6", "v134.6", "h-19.2" ] ],
+    [ "lcd2:SCL", "bb1:5t.a", "green", [ "h-9.6", "v125.1", "h-9.6" ] ],
+    [ "esp:21", "bb1:4t.e", "green", [ "h9.6", "v28.8", "h144" ] ],
+    [ "esp:22", "bb1:5t.e", "green", [ "h9.6", "v57.6", "h153.6" ] ],
+    [ "ldr1:VCC", "bb1:tp.6", "white", [ "h9.6", "v57.6", "h-470.4" ] ],
+    [ "ldr1:GND", "bb1:tn.6", "black", [ "h19.2", "v47.6", "h-470.4", "v0" ] ],
+    [ "ultrasonic1:GND", "bb1:tn.11", "black", [ "v9.6", "h-135.6", "v-297.6" ] ],
+    [ "ultrasonic1:VCC", "bb1:tp.11", "white", [ "v19.2", "h-115.2", "v-316.8" ] ],
+    [ "ultrasonic1:TRIG", "bb1:15t.a", "green", [ "v28.8", "h-134.8", "v-297.6", "h211.2" ] ],
+    [ "ultrasonic1:ECHO", "bb1:16t.a", "green", [ "v38.4", "h-154.4", "v-307.2", "h230.4" ] ],
+    [ "esp:5", "bb1:15t.e", "green", [ "h9.6", "v-9.6", "h249.6" ] ],
+    [ "esp:18", "bb1:16t.e", "green", [ "h268.8" ] ],
+    [ "dht1:VCC", "bb1:tp.16", "white", [ "v28.8", "h-278.4", "v-240" ] ],
+    [ "dht1:GND", "bb1:tn.16", "black", [ "v38.4", "h-316.8", "v-249.6", "h0", "v-96" ] ],
+    [ "dht1:SDA", "bb1:21t.a", "green", [ "v9.6", "h38.5", "v-297.6", "h-38.4" ] ],
+    [ "esp:15", "bb1:21t.e", "green", [ "v0", "h9.6", "v-67.2", "h307.2" ] ],
+    [ "ldr1:AO", "bb1:9t.a", "green", [ "h76.8", "v66.5", "h-9.6" ] ],
+    [ "led2:A", "bb1:34t.c", "", [ "$bb" ] ],
+    [ "led2:C", "bb1:33t.c", "", [ "$bb" ] ],
+    [ "bb1:tn.25", "bb1:33t.e", "black", [ "v76.7", "h18.4" ] ],
+    [ "led1:A", "bb1:46t.c", "", [ "$bb" ] ],
+    [ "led1:C", "bb1:45t.c", "", [ "$bb" ] ],
+    [ "bb1:tn.35", "bb1:45t.e", "black", [ "v76.7", "h18.4" ] ],
+    [ "r1:1", "bb1:34t.d", "", [ "$bb" ] ],
+    [ "r1:2", "bb1:40t.d", "", [ "$bb" ] ],
+    [ "r2:1", "bb1:46t.d", "", [ "$bb" ] ],
+    [ "r2:2", "bb1:52t.d", "", [ "$bb" ] ],
+    [ "esp:2", "bb1:40t.e", "green", [ "h9.6", "v-57.6", "h489.6" ] ],
+    [ "esp:4", "bb1:52t.e", "green", [ "h9.6", "v-38.4", "h480", "v0", "h124.8" ] ],
+    [ "esp:34", "bb1:9t.e", "green", [ "h-9.45", "v-76.8", "h115.2", "v115.2", "h192" ] ]
+  ],
+  "dependencies": {}
+}
